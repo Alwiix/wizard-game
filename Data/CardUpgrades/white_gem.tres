@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CardUpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/CardUpgrades/card_upgrade_data.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+upgrade_id = &"white_gem"
+display_name = "White Gem"
+description = "If this card is the first selected element, the spell costs 1 less energy."
+energy_cost_modifier = -1
+properties = Array[StringName]([&"cost_reduction"])
+active_cast_slots = Array[int]([0])

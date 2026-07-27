@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="CardUpgradeData" format=3 uid="uid://b1li24au81u3p"]
+
+[ext_resource type="Script" uid="uid://ivjf8cs3tagb" path="res://Scripts/CardUpgrades/card_upgrade_data.gd" id="1_upgrade"]
+[ext_resource type="Script" uid="uid://b37awwwh4k5be" path="res://statuses/combat_effect_data.gd" id="2_effect"]
+
+[sub_resource type="Resource" id="ApplyWet"]
+script = ExtResource("2_effect")
+effect_type = 1
+target = 1
+amount = 1
+status_id = &"wet"
+duration = 2
+
+[resource]
+script = ExtResource("1_upgrade")
+upgrade_id = &"blue_gem"
+display_name = "Blue Gem"
+description = "If this card is the first selected element, it applies Wet for 2 turns when used."
+properties = Array[StringName]([&"apply_wet_on_use"])
+active_cast_slots = Array[int]([0])
+on_use_effects = Array[ExtResource("2_effect")]([SubResource("ApplyWet")])

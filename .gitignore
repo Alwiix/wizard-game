@@ -1,0 +1,26 @@
+# Godot 4 generated files
+.godot/
+
+# Godot 3 generated files (safe to ignore if the project is opened by Godot 3)
+.import/
+*.import
+
+# C# / Mono generated files
+.mono/
+data_*/
+
+# Export credentials may contain signing secrets
+export_credentials.cfg
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary and backup files
+*.tmp
+*.temp
+*.bak
+*~

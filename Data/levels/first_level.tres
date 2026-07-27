@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://1kbbv10cgqkf"]
+
+[ext_resource type="Script" uid="uid://d1loyofxggh7r" path="res://scenes/enemies/encounter_data.gd" id="1_28edi"]
+[ext_resource type="Script" uid="uid://bama78feukdf4" path="res://run/level_data.gd" id="1_level"]
+[ext_resource type="Resource" uid="uid://8ohdjbh0bw0q" path="res://Data/encounters/skeleton_encounter.tres" id="2_skeleton"]
+[ext_resource type="Resource" uid="uid://btar8riegjp8j" path="res://Data/encounters/zombie_encounter.tres" id="3_zombie"]
+
+[resource]
+script = ExtResource("1_level")
+level_id = &"first_level"
+display_name = "The First Descent"
+encounters = Array[ExtResource("1_28edi")]([ExtResource("2_skeleton"), ExtResource("3_zombie"), ExtResource("2_skeleton")])

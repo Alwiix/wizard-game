@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="Damage"]
+script = ExtResource("1_effect")
+target = 1
+amount = 4
+element = &"lightning"
+
+[sub_resource type="Resource" id="Block"]
+script = ExtResource("1_effect")
+effect_type = 1
+amount = 4
+status_id = &"block"
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"lightning_helix"
+display_name = "Lightning Helix"
+description = "Deal 4 damage and gain 4 Block."
+energy_cost = 2
+effects = Array[ExtResource("1_effect")]([SubResource("Damage"), SubResource("Block")])

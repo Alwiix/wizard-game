@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="SpellLibraryData" format=3 uid="uid://diauw6ghk3eiv"]
+
+[ext_resource type="Script" path="res://Scripts/Spells/spell_recipe_data.gd" id="1_recipe"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_library.gd" id="2_library"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/speed.tres" id="3_speed"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/lightning_helix.tres" id="4_helix"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/slip_dodge.tres" id="5_dodge"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/dash.tres" id="6_dash"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/hurricane.tres" id="7_hurricane"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/lightning_bolt.tres" id="8_bolt"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/ice_wall.tres" id="9_wall"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/typhoon.tres" id="10_typhoon"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/ice_shard.tres" id="11_shard"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/arctic_gust.tres" id="12_gust"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/shock_wall.tres" id="13_shock"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/water_ball.tres" id="14_ball"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/jolt.tres" id="15_jolt"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/stormcloud.tres" id="16_storm"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/slash.tres" id="17_slash"]
+
+[resource]
+script = ExtResource("2_library")
+recipes = Array[ExtResource("1_recipe")]([ExtResource("3_speed"), ExtResource("4_helix"), ExtResource("5_dodge"), ExtResource("6_dash"), ExtResource("7_hurricane"), ExtResource("8_bolt"), ExtResource("9_wall"), ExtResource("10_typhoon"), ExtResource("11_shard"), ExtResource("12_gust"), ExtResource("13_shock"), ExtResource("14_ball"), ExtResource("15_jolt"), ExtResource("16_storm"), ExtResource("17_slash")])

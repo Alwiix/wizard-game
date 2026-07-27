@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="Dodge"]
+script = ExtResource("1_effect")
+effect_type = 1
+amount = 1
+status_id = &"dodge"
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"slip_dodge"
+display_name = "Slip Dodge"
+description = "Gain 1 Dodge."
+energy_cost = 2
+effects = Array[ExtResource("1_effect")]([SubResource("Dodge")])

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3 uid="uid://8ohdjbh0bw0q"]
+
+[ext_resource type="Resource" uid="uid://co615t3j85tg4" path="res://Data/enemy_types/skeleton.tres" id="1_oix4d"]
+[ext_resource type="Script" uid="uid://d1loyofxggh7r" path="res://scenes/enemies/encounter_data.gd" id="1_wuy5b"]
+
+[resource]
+script = ExtResource("1_wuy5b")
+encounter_id = &"skeleton_encounter"
+display_name = "Skeleton encounter"
+enemy_data = ExtResource("1_oix4d")
+metadata/_custom_type_script = "uid://d1loyofxggh7r"

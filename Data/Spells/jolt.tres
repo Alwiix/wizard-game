@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="Damage"]
+script = ExtResource("1_effect")
+target = 1
+amount = 4
+element = &"lightning"
+
+[sub_resource type="Resource" id="Electrified"]
+script = ExtResource("1_effect")
+effect_type = 1
+target = 1
+amount = 2
+status_id = &"electrified"
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"jolt"
+display_name = "Jolt"
+description = "Deal 4 damage and apply 2 Electrified. When Wet, Electrified deals 1 damage per stack and is removed."
+energy_cost = 1
+effects = Array[ExtResource("1_effect")]([SubResource("Damage"), SubResource("Electrified")])

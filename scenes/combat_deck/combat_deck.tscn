@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://b7m5ccyh4xdxl"]
+
+[ext_resource type="Script" uid="uid://csi3rdfg7pwjn" path="res://scenes/combat_deck/combat_deck.gd" id="1_rtew4"]
+
+[node name="CombatDeck" type="Control" unique_id=2114265267]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rtew4")
+
+[node name="Hand" type="HBoxContainer" parent="." unique_id=2103789318]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 268.0
+offset_top = 516.0
+offset_right = -231.0
+offset_bottom = 630.0
+grow_horizontal = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DrawPileLabel" type="Label" parent="." unique_id=349558393]
+layout_mode = 0
+offset_left = 97.0
+offset_top = 562.0
+offset_right = 188.0
+offset_bottom = 585.0
+text = "Draw Pile: 0"
+
+[node name="DiscardPileLabel" type="Label" parent="." unique_id=1173191686]
+layout_mode = 0
+offset_left = 945.0
+offset_top = 555.0
+offset_right = 1053.0
+offset_bottom = 604.0
+text = "Discard Pile: 0
+"

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3 uid="uid://btar8riegjp8j"]
+
+[ext_resource type="Resource" uid="uid://chd2l8j2fsh51" path="res://Data/enemy_types/zombie.tres" id="1_26mqs"]
+[ext_resource type="Script" uid="uid://d1loyofxggh7r" path="res://scenes/enemies/encounter_data.gd" id="1_bw1e2"]
+
+[resource]
+script = ExtResource("1_bw1e2")
+encounter_id = &"zombie_encounter"
+display_name = "Zombie encounter"
+enemy_data = ExtResource("1_26mqs")
+metadata/_custom_type_script = "uid://d1loyofxggh7r"

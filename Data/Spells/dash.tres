@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://ce0je8grp03ji"]
+
+[ext_resource type="Script" uid="uid://b37awwwh4k5be" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" uid="uid://tgvkch11m1mi" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="BonusEnergy"]
+script = ExtResource("1_effect")
+effect_type = 1
+amount = 1
+status_id = &"bonus_energy"
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"dash"
+display_name = "Dash"
+description = "Gain 1 additional energy next turn."
+energy_cost = 2
+effects = Array[ExtResource("1_effect")]([SubResource("BonusEnergy")])

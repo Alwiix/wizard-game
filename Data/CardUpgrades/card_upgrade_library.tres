@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CardUpgradeLibraryData" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://Scripts/CardUpgrades/card_upgrade_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://Scripts/CardUpgrades/card_upgrade_library.gd" id="2_library"]
+[ext_resource type="Resource" path="res://Data/CardUpgrades/heavy_rock.tres" id="3_heavy"]
+[ext_resource type="Resource" path="res://Data/CardUpgrades/white_gem.tres" id="4_white"]
+[ext_resource type="Resource" path="res://Data/CardUpgrades/blue_gem.tres" id="5_blue"]
+
+[resource]
+script = ExtResource("2_library")
+upgrades = Array[ExtResource("1_data")]([ExtResource("3_heavy"), ExtResource("4_white"), ExtResource("5_blue")])

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="Stormcloud"]
+script = ExtResource("1_effect")
+effect_type = 1
+target = 1
+amount = 1
+status_id = &"stormcloud"
+duration = 3
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"stormcloud"
+display_name = "Stormcloud"
+description = "Deal 2 damage at the end of the target's turn for 3 turns, or 3 while Wet."
+energy_cost = 1
+effects = Array[ExtResource("1_effect")]([SubResource("Stormcloud")])

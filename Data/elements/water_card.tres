@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ElementCardData" format=3 uid="uid://cp4p5jpistw8t"]
+
+[ext_resource type="Script" uid="uid://bx1og07ktqu3y" path="res://scenes/cards/element_card_data.gd" id="1_oq32b"]
+
+[resource]
+script = ExtResource("1_oq32b")
+card_id = "Water"
+element_name = "Water"
+display_name = "Water"
+metadata/_custom_type_script = "uid://bx1og07ktqu3y"

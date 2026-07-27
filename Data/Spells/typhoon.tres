@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="Damage"]
+script = ExtResource("1_effect")
+target = 1
+amount = 6
+element = &"air"
+
+[sub_resource type="Resource" id="EnemyWet"]
+script = ExtResource("1_effect")
+effect_type = 1
+target = 1
+amount = 1
+status_id = &"wet"
+duration = 3
+
+[sub_resource type="Resource" id="PlayerWet"]
+script = ExtResource("1_effect")
+effect_type = 1
+amount = 1
+status_id = &"wet"
+duration = 3
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"typhoon"
+display_name = "Typhoon"
+description = "Deal 6 damage and make everyone Wet for 3 turns."
+energy_cost = 2
+effects = Array[ExtResource("1_effect")]([SubResource("Damage"), SubResource("EnemyWet"), SubResource("PlayerWet")])

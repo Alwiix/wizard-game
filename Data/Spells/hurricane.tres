@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://3j8tykiaromm"]
+
+[ext_resource type="Script" uid="uid://b37awwwh4k5be" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" uid="uid://tgvkch11m1mi" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="Damage"]
+script = ExtResource("1_effect")
+target = 1
+amount = 2
+element = &"air"
+
+[sub_resource type="Resource" id="Bleed"]
+script = ExtResource("1_effect")
+effect_type = 1
+target = 1
+amount = 4
+status_id = &"bleed"
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"hurricane"
+display_name = "Hurricane"
+description = "Deal 2 damage and apply 4 Bleed."
+energy_cost = 2
+effects = Array[ExtResource("1_effect")]([SubResource("Damage"), SubResource("Bleed")])

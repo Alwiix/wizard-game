@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ElementCardData" format=3 uid="uid://hu4r1cayia0q"]
+
+[ext_resource type="Script" uid="uid://bx1og07ktqu3y" path="res://scenes/cards/element_card_data.gd" id="1_3u8rg"]
+
+[resource]
+script = ExtResource("1_3u8rg")
+card_id = "Air"
+element_name = "Air"
+display_name = "Air"
+metadata/_custom_type_script = "uid://bx1og07ktqu3y"

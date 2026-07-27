@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="Block"]
+script = ExtResource("1_effect")
+effect_type = 1
+amount = 5
+status_id = &"block"
+
+[sub_resource type="Resource" id="ElectrifiedGuard"]
+script = ExtResource("1_effect")
+effect_type = 1
+amount = 2
+status_id = &"electrified_guard"
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"shock_wall"
+display_name = "Shock Wall"
+description = "Gain 5 Block. The next enemy to hit you gains 2 Electrified."
+energy_cost = 1
+effects = Array[ExtResource("1_effect")]([SubResource("Block"), SubResource("ElectrifiedGuard")])

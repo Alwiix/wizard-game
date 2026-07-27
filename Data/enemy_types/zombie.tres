@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://chd2l8j2fsh51"]
+
+[ext_resource type="Script" uid="uid://4wo7fkpk8heg" path="res://scenes/enemies/enemy_move_data.gd" id="1_ctxlc"]
+[ext_resource type="Script" uid="uid://kxq5u5542chp" path="res://scenes/enemies/enemy_data.gd" id="2_8d7oe"]
+[ext_resource type="Script" uid="uid://b37awwwh4k5be" path="res://statuses/combat_effect_data.gd" id="2_qx8v3"]
+
+[sub_resource type="Resource" id="Resource_lwy8j"]
+script = ExtResource("2_qx8v3")
+amount = 4
+metadata/_custom_type_script = "uid://b37awwwh4k5be"
+
+[sub_resource type="Resource" id="Resource_qx8v3"]
+script = ExtResource("1_ctxlc")
+intent_text = "Attack 4"
+action_text = "Zombie punches"
+effects = Array[ExtResource("2_qx8v3")]([SubResource("Resource_lwy8j")])
+metadata/_custom_type_script = "uid://4wo7fkpk8heg"
+
+[sub_resource type="Resource" id="Resource_oiw7q"]
+script = ExtResource("2_qx8v3")
+effect_type = 1
+amount = 1
+status_id = &"infection"
+metadata/_custom_type_script = "uid://b37awwwh4k5be"
+
+[sub_resource type="Resource" id="Resource_iwk05"]
+script = ExtResource("1_ctxlc")
+intent_text = "The enemy is going to Bite"
+action_text = "Zombie bites you"
+effects = Array[ExtResource("2_qx8v3")]([SubResource("Resource_oiw7q")])
+metadata/_custom_type_script = "uid://4wo7fkpk8heg"
+
+[resource]
+script = ExtResource("2_8d7oe")
+enemy_id = &"zombie"
+display_name = "Zombie"
+moves = Array[ExtResource("1_ctxlc")]([SubResource("Resource_qx8v3"), SubResource("Resource_iwk05")])
+metadata/_custom_type_script = "uid://kxq5u5542chp"

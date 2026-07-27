@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dbh8nh8tuqgln"]
+
+[ext_resource type="Script" uid="uid://dls0elvdf5kv" path="res://scenes/cards/element_card.gd" id="1_diwp2"]
+
+[node name="ElementCard" type="Button" unique_id=1069921689]
+custom_minimum_size = Vector2(72, 100)
+offset_right = 72.0
+offset_bottom = 100.0
+toggle_mode = true
+text = "Element"
+script = ExtResource("1_diwp2")

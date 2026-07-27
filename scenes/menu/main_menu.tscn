@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://btjnm1bekxwbo"]
+
+[ext_resource type="Script" uid="uid://beklfxdss53l1" path="res://scenes/menu/main_menu.gd" id="1_menu"]
+
+[node name="MainMenu" type="Control" unique_id=944534326]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="." unique_id=277406505]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.07, 0.055, 0.12, 1)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=670145078]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="Center" unique_id=566069342]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Center/Menu" unique_id=2088934697]
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "Wizard Deckbuilder"
+horizontal_alignment = 1
+
+[node name="DifficultyLabel" type="Label" parent="Center/Menu" unique_id=23160962]
+layout_mode = 2
+text = "Difficulty"
+
+[node name="DifficultyOption" type="OptionButton" parent="Center/Menu" unique_id=1708638220]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+
+[node name="DifficultyDescription" type="Label" parent="Center/Menu" unique_id=719716475]
+layout_mode = 2
+text = "Enemy health: 100%"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Center/Menu" unique_id=1864140479]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="WizardLabel" type="Label" parent="Center/Menu" unique_id=2125359902]
+layout_mode = 2
+text = "Wizard"
+
+[node name="WizardOption" type="OptionButton" parent="Center/Menu" unique_id=425070895]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+
+[node name="DeckDescription" type="Label" parent="Center/Menu" unique_id=233888912]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+text = "Starting deck:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartButton" type="Button" parent="Center/Menu" unique_id=1243705452]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Start Game"

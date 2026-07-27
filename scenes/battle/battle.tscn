@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://cka5je266oukt"]
+
+[ext_resource type="Script" uid="uid://dsime1meaxs14" path="res://scenes/battle/battle.gd" id="1_0yh6x"]
+[ext_resource type="Resource" uid="uid://8ohdjbh0bw0q" path="res://Data/encounters/skeleton_encounter.tres" id="2_agsc7"]
+[ext_resource type="PackedScene" uid="uid://dnie46w5xcdj2" path="res://scenes/player/player.tscn" id="2_fh7rg"]
+[ext_resource type="PackedScene" uid="uid://cc6vry2m3og" path="res://scenes/enemies/enemy.tscn" id="2_h0kxc"]
+[ext_resource type="PackedScene" uid="uid://b7m5ccyh4xdxl" path="res://scenes/combat_deck/combat_deck.tscn" id="3_0yh6x"]
+[ext_resource type="Script" uid="uid://jdpjumn147bt" path="res://Scripts/Spells/spell_resolver.gd" id="4_pll4o"]
+[ext_resource type="PackedScene" uid="uid://bmly1xxk1wh2h" path="res://scenes/turn_manager/turn_manager.tscn" id="5_pll4o"]
+[ext_resource type="Resource" uid="uid://diauw6ghk3eiv" path="res://Data/Spells/spell_library.tres" id="7_agsc7"]
+[ext_resource type="Script" uid="uid://dh1np7qyytexp" path="res://statuses/combat_effect_resolver.gd" id="7_pll4o"]
+[ext_resource type="Script" path="res://combat/combat_events.gd" id="8_events"]
+[ext_resource type="Script" path="res://combat/battle_modifier_controller.gd" id="9_modifiers"]
+[ext_resource type="Script" path="res://combat/battle_controller.gd" id="10_controller"]
+
+[node name="Battle" type="Node2D" unique_id=1039771782]
+script = ExtResource("1_0yh6x")
+encounter_data = ExtResource("2_agsc7")
+
+[node name="Player" parent="." unique_id=802157067 instance=ExtResource("2_fh7rg")]
+
+[node name="Enemy" parent="." unique_id=649599461 instance=ExtResource("2_h0kxc")]
+
+[node name="CombatDeck" parent="." unique_id=2114265267 instance=ExtResource("3_0yh6x")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpellResolver" type="Node" parent="." unique_id=45936639]
+script = ExtResource("4_pll4o")
+spell_library = ExtResource("7_agsc7")
+
+[node name="TurnManager" parent="." unique_id=1190265690 instance=ExtResource("5_pll4o")]
+
+[node name="CombatEffectResolver" type="Node" parent="." unique_id=316397167]
+script = ExtResource("7_pll4o")
+
+[node name="CombatEvents" type="Node" parent="."]
+script = ExtResource("8_events")
+
+[node name="BattleModifierController" type="Node" parent="."]
+script = ExtResource("9_modifiers")
+
+[node name="BattleController" type="Node" parent="."]
+script = ExtResource("10_controller")
+
+[node name="CastButton" type="Button" parent="." unique_id=1071399187]
+offset_left = 837.0
+offset_top = 382.0
+offset_right = 919.0
+offset_bottom = 413.0
+text = "CAST"
+
+[node name="EndTurnButton" type="Button" parent="." unique_id=1893735023]
+offset_left = 836.0
+offset_top = 438.0
+offset_right = 926.0
+offset_bottom = 469.0
+text = "END TURN"
+
+[node name="TurnLabel" type="Label" parent="." unique_id=925729614]
+offset_left = 16.0
+offset_top = 82.0
+offset_right = 180.0
+offset_bottom = 110.0
+text = "Your Turn"
+
+[node name="ArenaStatusLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 14.0
+offset_right = 340.0
+offset_bottom = 68.0
+theme_override_font_sizes/font_size = 18
+text = "Arena: None"
+
+[node name="VictoryLabel" type="Label" parent="." unique_id=242007250]
+visible = false
+offset_left = 478.0
+offset_top = 219.0
+offset_right = 686.0
+offset_bottom = 305.0
+text = "Enemy Defeated!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DefeatLabel" type="Label" parent="." unique_id=1742771617]
+visible = false
+offset_left = 419.0
+offset_top = 185.0
+offset_right = 565.0
+offset_bottom = 208.0
+text = "You were defeated"
+
+[node name="CombinationLabel" type="Label" parent="." unique_id=1393171128]
+offset_left = 417.0
+offset_top = 150.0
+offset_right = 573.0
+offset_bottom = 206.0
+text = "Select up to three elements"
+
+[connection signal="pressed" from="CastButton" to="." method="_on_cast_button_pressed"]

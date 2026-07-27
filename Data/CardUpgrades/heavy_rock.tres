@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CardUpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/CardUpgrades/card_upgrade_data.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+upgrade_id = &"heavy_rock"
+display_name = "Heavy Rock"
+description = "This card is retained at the end of every turn."
+properties = Array[StringName]([&"retain"])

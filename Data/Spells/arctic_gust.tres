@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="Damage"]
+script = ExtResource("1_effect")
+target = 1
+amount = 3
+element = &"ice"
+
+[sub_resource type="Resource" id="Cold"]
+script = ExtResource("1_effect")
+effect_type = 1
+target = 1
+amount = 1
+status_id = &"cold"
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"arctic_gust"
+display_name = "Arctic Gust"
+description = "Deal 3 damage and apply 1 Cold."
+energy_cost = 1
+effects = Array[ExtResource("1_effect")]([SubResource("Damage"), SubResource("Cold")])

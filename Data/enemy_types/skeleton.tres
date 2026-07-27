@@ -1,0 +1,72 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://co615t3j85tg4"]
+
+[ext_resource type="Script" uid="uid://4wo7fkpk8heg" path="res://scenes/enemies/enemy_move_data.gd" id="1_kwbvy"]
+[ext_resource type="Script" uid="uid://b37awwwh4k5be" path="res://statuses/combat_effect_data.gd" id="2_fkr7b"]
+[ext_resource type="Script" uid="uid://kxq5u5542chp" path="res://scenes/enemies/enemy_data.gd" id="3_kbrvw"]
+
+[sub_resource type="Resource" id="Resource_xesnj"]
+script = ExtResource("2_fkr7b")
+amount = 4
+metadata/_custom_type_script = "uid://b37awwwh4k5be"
+
+[sub_resource type="Resource" id="Resource_bg73t"]
+script = ExtResource("1_kwbvy")
+move_name = "Slash"
+intent_text = "Attack 4"
+action_text = "Skeleton slashes"
+effects = Array[ExtResource("2_fkr7b")]([SubResource("Resource_xesnj")])
+metadata/_custom_type_script = "uid://4wo7fkpk8heg"
+
+[sub_resource type="Resource" id="Resource_agsc7"]
+script = ExtResource("2_fkr7b")
+amount = 4
+metadata/_custom_type_script = "uid://b37awwwh4k5be"
+
+[sub_resource type="Resource" id="Resource_py4tk"]
+script = ExtResource("1_kwbvy")
+intent_text = "Attack 4"
+action_text = "Skeleton slashes"
+effects = Array[ExtResource("2_fkr7b")]([SubResource("Resource_agsc7")])
+metadata/_custom_type_script = "uid://4wo7fkpk8heg"
+
+[sub_resource type="Resource" id="Resource_fisqk"]
+script = ExtResource("2_fkr7b")
+effect_type = 1
+target = 1
+amount = 5
+status_id = &"block"
+metadata/_custom_type_script = "uid://b37awwwh4k5be"
+
+[sub_resource type="Resource" id="Resource_mxe8n"]
+script = ExtResource("2_fkr7b")
+effect_type = 1
+amount = 1
+status_id = &"wet"
+duration = 3
+metadata/_custom_type_script = "uid://b37awwwh4k5be"
+
+[sub_resource type="Resource" id="Resource_oiw7q"]
+script = ExtResource("1_kwbvy")
+intent_text = "Use an ability"
+action_text = "The skeleton is getting ready"
+effects = Array[ExtResource("2_fkr7b")]([SubResource("Resource_fisqk"), SubResource("Resource_mxe8n")])
+metadata/_custom_type_script = "uid://4wo7fkpk8heg"
+
+[sub_resource type="Resource" id="Resource_kd6yx"]
+script = ExtResource("2_fkr7b")
+amount = 8
+metadata/_custom_type_script = "uid://b37awwwh4k5be"
+
+[sub_resource type="Resource" id="Resource_icoan"]
+script = ExtResource("1_kwbvy")
+intent_text = "Attack 8"
+action_text = "The skeleton augments his swings with lightning"
+effects = Array[ExtResource("2_fkr7b")]([SubResource("Resource_kd6yx")])
+properties = Array[StringName]([&"electric"])
+metadata/_custom_type_script = "uid://4wo7fkpk8heg"
+
+[resource]
+script = ExtResource("3_kbrvw")
+enemy_id = &"skeleton"
+display_name = "Skeleton"
+moves = Array[ExtResource("1_kwbvy")]([SubResource("Resource_bg73t"), SubResource("Resource_py4tk"), SubResource("Resource_oiw7q"), SubResource("Resource_icoan")])
