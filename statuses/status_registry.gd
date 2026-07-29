@@ -39,6 +39,18 @@ const STATUS_SCRIPTS: Dictionary = {
 	),
 	&"bonus_energy": preload(
 		"res://statuses/effects/bonus_energy_status.gd"
+	),
+	&"muddy": preload(
+		"res://statuses/effects/muddy_status.gd"
+	),
+	&"firebreathing": preload(
+		"res://statuses/effects/firebreathing_status.gd"
+	),
+	&"creeping_vines": preload(
+		"res://statuses/effects/creeping_vines_status.gd"
+	),
+	&"oil": preload(
+		"res://statuses/effects/oil_status.gd"
 	)
 }
 

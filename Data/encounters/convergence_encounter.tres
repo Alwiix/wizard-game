@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EncounterData" format=3]
+
+[ext_resource type="Script" path="res://scenes/enemies/encounter_data.gd" id="1_encounter"]
+[ext_resource type="Script" path="res://scenes/enemies/enemy_data.gd" id="2_enemy_script"]
+[ext_resource type="Resource" path="res://Data/enemy_types/skeleton.tres" id="3_skeleton"]
+[ext_resource type="Resource" path="res://Data/enemy_types/zombie.tres" id="4_zombie"]
+
+[resource]
+script = ExtResource("1_encounter")
+encounter_id = &"convergence_encounter"
+display_name = "Guardians of the Convergence"
+enemies = Array[ExtResource("2_enemy_script")]([ExtResource("3_skeleton"), ExtResource("4_zombie")])
+is_boss = true

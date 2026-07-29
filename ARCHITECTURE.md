@@ -58,6 +58,21 @@ status while the other is present deals Lightning damage equal to all
 Electrified stacks, then removes Electrified. Frozen uses consumable stacks,
 with each stack skipping one action.
 
+Creeping Vines and Oil are permanent resource statuses. Applying Wet to a
+target that already has Creeping Vines adds one Vine. Seeping Oil converts
+up to three Vines on each affected enemy into the same number of Oil stacks.
+Ignite consumes all Oil on damaged targets, applies an equal amount of Burn,
+and deals 8 additional damage when at least 5 Oil was consumed. Gust adds
+one additional Cold or Burn when damaging a target that already has that
+status.
+
+Muddy reduces all outgoing damage by 25 percent and loses one stack at the
+end of its owner's turn. Applying Wet removes existing Muddy, but Wet does
+not prevent a later Muddy application. Firebreathing is capped at one stack,
+lasts three turns, and adds one to each outgoing Burn application. Statuses
+modify outgoing actions through `StatusController`; property handlers
+remain responsible for action-level transformations.
+
 ## Battle and run flow
 
 `BattleController` owns encounter construction, enemy rosters, selected
@@ -68,8 +83,25 @@ An encounter can use the legacy `enemy_data` field for one enemy or the
 `enemies` array for an ordered roster. Enemy move order remains local to each
 enemy, and the roster determines enemy turn order.
 
-`RunFlow` owns the high-level battle, reward, map placeholder, transition,
+`RunFlow` owns the high-level leyline map, battle, reward, transition,
 completion, and defeat phases. Persistent run data belongs in `RunState`.
+
+Runs begin with one card from each of the six elements. Turn draws refill
+the hand to three cards rather than always drawing three additional cards,
+so retained cards count toward the normal hand size. Reaching twelve deck
+cards permanently increases that run's refill size to four, even if the
+deck is subsequently thinned.
+
+`LeylineMapData` contains the authored web of `LeylineLocationData`
+resources. Locations declare their connections, elemental affinity, map
+position, encounter, and behavior. `RunState` records the current location,
+cleared locations, sealed rifts, and instability. Every travelled edge adds
+instability, which currently increases enemy health by three percent.
+
+Combat location affinities open the full element catalog for that reward
+and guarantee a matching element among its three choices. Unaligned rewards
+continue to use the wizard's normal reward pool. The final convergence
+remains sealed until the configured number of rifts have been completed.
 
 ## Compatibility
 

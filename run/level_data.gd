@@ -8,3 +8,6 @@ extends Resource
 
 @export_group("Encounters")
 @export var encounters: Array[EncounterData] = []
+
+@export_group("Leyline Map")
+@export var leyline_map: LeylineMapData

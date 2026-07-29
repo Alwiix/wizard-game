@@ -11,7 +11,6 @@ const ELEMENT_CARD_SCENE: PackedScene = preload(
 	"res://scenes/cards/element_card.tscn"
 )
 
-@export var cards_drawn_per_turn: int = 3
 @export var maximum_hand_size: int = 8
 
 
@@ -43,9 +42,9 @@ func _fit_to_viewport() -> void:
 		hand.anchor_left = 0.0
 		hand.anchor_right = 1.0
 		hand.offset_left = 80.0
-		hand.offset_top = 450.0
+		hand.offset_top = 252.0
 		hand.offset_right = -80.0
-		hand.offset_bottom = 630.0
+		hand.offset_bottom = 358.0
 		hand.alignment = BoxContainer.ALIGNMENT_CENTER
 
 
@@ -63,7 +62,15 @@ func start_battle() -> void:
 
 
 func draw_turn_hand() -> int:
-	return draw_cards(cards_drawn_per_turn)
+	var target_hand_size: int = mini(
+		RunState.get_turn_hand_size(),
+		maximum_hand_size
+	)
+	var cards_needed: int = maxi(
+		target_hand_size - hand_cards.size(),
+		0
+	)
+	return draw_cards(cards_needed)
 
 
 func draw_cards(amount: int) -> int:

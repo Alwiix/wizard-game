@@ -54,6 +54,7 @@ func resolve_effects(
 			continue
 
 		if effect.explicit_target == null:
+			effect.source_combatant = player
 			var targets := context.resolve_targets(
 				effect.target_type,
 				CombatAction.new()
@@ -78,6 +79,9 @@ func resolve_runtime_effects(
 	context: CombatContext
 ) -> CombatResult:
 	var result := CombatResult.new()
+	var global_condition_results: Dictionary = (
+		_capture_global_condition_results(effects, context)
+	)
 
 	for effect in effects:
 		if effect == null:
@@ -88,7 +92,12 @@ func resolve_runtime_effects(
 		if target == null or not is_instance_valid(target):
 			continue
 
-		if not _effect_condition_is_met(effect, target):
+		if not _effect_condition_is_met(
+			effect,
+			target,
+			context,
+			global_condition_results
+		):
 			continue
 
 		result.record_target(target)
@@ -127,6 +136,22 @@ func resolve_runtime_effects(
 					and target.has_method("remove_status")
 				):
 					target.remove_status(effect.status_id)
+
+			CombatEffectData.EffectType.MULTIPLY_STATUS:
+				_resolve_multiply_status(
+					effect,
+					target,
+					context,
+					result
+				)
+
+			CombatEffectData.EffectType.CONVERT_STATUS:
+				_resolve_convert_status(
+					effect,
+					target,
+					context,
+					result
+				)
 
 	return result
 
@@ -275,7 +300,7 @@ func _resolve_apply_status(
 	var status_was_applied := bool(
 		target.add_status(
 			effect.status_id,
-			effect.amount,
+			_get_outgoing_status_amount(effect),
 			effect.duration
 		)
 	)
@@ -298,6 +323,106 @@ func _resolve_apply_status(
 			+ context.get_target_display_name(target)
 			+ "."
 		)
+
+
+func _resolve_multiply_status(
+	effect: ResolvedCombatEffect,
+	target: Node,
+	context: CombatContext,
+	result: CombatResult
+) -> void:
+	if (
+		effect.status_id == &""
+		or not target.has_method("get_status_stacks")
+		or not target.has_method("add_status")
+	):
+		return
+
+	var current_stacks: int = target.get_status_stacks(
+		effect.status_id
+	)
+
+	if current_stacks <= 0:
+		return
+
+	var multiplier: int = maxi(effect.amount, 1)
+	var additional_stacks: int = (
+		current_stacks * (multiplier - 1)
+	)
+
+	if additional_stacks <= 0:
+		return
+
+	target.add_status(
+		effect.status_id,
+		additional_stacks,
+		effect.duration
+	)
+	result.add_message(
+		"Multiplied "
+		+ String(effect.status_id).capitalize()
+		+ " on "
+		+ context.get_target_display_name(target)
+		+ "."
+	)
+
+
+func _resolve_convert_status(
+	effect: ResolvedCombatEffect,
+	target: Node,
+	context: CombatContext,
+	result: CombatResult
+) -> void:
+	if (
+		effect.status_id == &""
+		or effect.converted_status_id == &""
+		or not target.has_method("remove_status_stacks")
+		or not target.has_method("add_status")
+	):
+		return
+
+	var converted_stacks: int = target.remove_status_stacks(
+		effect.status_id,
+		max(effect.amount, 0)
+	)
+
+	if converted_stacks <= 0:
+		return
+
+	target.add_status(
+		effect.converted_status_id,
+		converted_stacks,
+		effect.duration
+	)
+	result.add_message(
+		"Converted "
+		+ str(converted_stacks)
+		+ " "
+		+ String(effect.status_id).capitalize()
+		+ " into "
+		+ String(effect.converted_status_id).capitalize()
+		+ " on "
+		+ context.get_target_display_name(target)
+		+ "."
+	)
+
+
+func _get_outgoing_status_amount(
+	effect: ResolvedCombatEffect
+) -> int:
+	var amount: int = max(effect.amount, 0)
+	var source := effect.source_combatant
+
+	if (
+		source != null
+		and source.has_method("modify_outgoing_status_amount")
+	):
+		amount = source.modify_outgoing_status_amount(
+			effect.status_id,
+			amount
+		)
+
+	return max(amount, 0)
 
 
 func _convert_to_runtime_effect(
@@ -330,7 +455,9 @@ func _target_meets_status_condition(
 
 func _effect_condition_is_met(
 	effect: ResolvedCombatEffect,
-	target: Node
+	target: Node,
+	_context: CombatContext,
+	global_condition_results: Dictionary
 ) -> bool:
 	if (
 		effect.condition_type
@@ -340,8 +467,21 @@ func _effect_condition_is_met(
 
 	if (
 		effect.condition_status_id == &""
-		or not target.has_method("has_status")
 	):
+		return false
+
+	if (
+		effect.condition_type
+		== CombatEffectData.ConditionType.NO_ENEMY_HAS_STATUS
+	):
+		return bool(
+			global_condition_results.get(
+				effect.condition_status_id,
+				false
+			)
+		)
+
+	if not target.has_method("has_status"):
 		return false
 
 	var target_has_status := bool(
@@ -355,6 +495,36 @@ func _effect_condition_is_met(
 			return not target_has_status
 		_:
 			return false
+
+
+func _capture_global_condition_results(
+	effects: Array[ResolvedCombatEffect],
+	context: CombatContext
+) -> Dictionary:
+	var results: Dictionary = {}
+
+	for effect in effects:
+		if (
+			effect == null
+			or effect.condition_type
+				!= CombatEffectData.ConditionType.NO_ENEMY_HAS_STATUS
+			or results.has(effect.condition_status_id)
+		):
+			continue
+
+		var no_enemy_has_status: bool = true
+
+		for enemy in context.get_living_enemies():
+			if (
+				enemy.has_method("has_status")
+				and enemy.has_status(effect.condition_status_id)
+			):
+				no_enemy_has_status = false
+				break
+
+		results[effect.condition_status_id] = no_enemy_has_status
+
+	return results
 
 
 func _get_effect_amount(

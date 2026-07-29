@@ -106,6 +106,27 @@ func remove_status(status_id_value: StringName) -> void:
 	statuses_changed.emit()
 
 
+func remove_status_stacks(
+	status_id_value: StringName,
+	amount: int
+) -> int:
+	var normalized_id: StringName = StringName(
+		String(status_id_value).to_lower()
+	)
+
+	if (
+		amount <= 0
+		or not active_statuses.has(normalized_id)
+	):
+		return 0
+
+	var status: StatusEffect = active_statuses[normalized_id]
+	var removed_stacks: int = mini(status.stacks, amount)
+	status.stacks -= removed_stacks
+	cleanup_expired_statuses()
+	return removed_stacks
+
+
 func has_status(status_id_value: StringName) -> bool:
 	var normalized_id: StringName = StringName(
 		String(status_id_value).to_lower()
@@ -171,6 +192,40 @@ func modify_incoming_damage(
 
 	cleanup_expired_statuses()
 	return final_amount
+
+
+func modify_outgoing_damage(amount: int) -> int:
+	var final_amount: int = max(amount, 0)
+
+	for status_value in active_statuses.values():
+		var status: StatusEffect = status_value as StatusEffect
+
+		if status != null:
+			final_amount = status.modify_outgoing_damage(
+				combatant,
+				final_amount
+			)
+
+	return max(final_amount, 0)
+
+
+func modify_outgoing_status_amount(
+	status_id: StringName,
+	amount: int
+) -> int:
+	var final_amount: int = max(amount, 0)
+
+	for status_value in active_statuses.values():
+		var status: StatusEffect = status_value as StatusEffect
+
+		if status != null:
+			final_amount = status.modify_outgoing_status_amount(
+				combatant,
+				status_id,
+				final_amount
+			)
+
+	return max(final_amount, 0)
 
 
 func resolve_action_attempt(can_miss: bool = true) -> StringName:

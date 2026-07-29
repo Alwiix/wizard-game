@@ -18,6 +18,9 @@ const BATTLE_SCENE: PackedScene = preload(
 const REWARD_SCREEN_SCENE: PackedScene = preload(
 	"res://scenes/rewards/reward_screen.tscn"
 )
+const LEYLINE_MAP_SCENE: PackedScene = preload(
+	"res://scenes/map/leyline_map_screen.tscn"
+)
 const MAIN_MENU_SCENE_PATH: String = (
 	"res://scenes/menu/main_menu.tscn"
 )
@@ -27,10 +30,11 @@ const MAIN_MENU_SCENE_PATH: String = (
 @export var transition_duration: float = 1.5
 
 
-var current_encounter_index: int = 0
 var current_phase: FlowPhase = FlowPhase.TRANSITION
 var active_battle: Node2D
 var active_reward_screen: RewardScreen
+var active_map_screen: LeylineMapScreen
+var active_map_location: LeylineLocationData
 
 
 @onready var battle_container: Node = $BattleContainer
@@ -53,33 +57,41 @@ func _ready() -> void:
 	restart_button.pressed.connect(_on_restart_button_pressed)
 	main_menu_button.pressed.connect(_on_main_menu_button_pressed)
 
-	if level_data == null or level_data.encounters.is_empty():
-		push_error("RunFlow requires a LevelData with encounters.")
-		_show_terminal_message("No encounters are configured.")
+	if level_data == null or level_data.leyline_map == null:
+		push_error("RunFlow requires a LevelData with a leyline map.")
+		_show_terminal_message("No leyline map is configured.")
 		return
 
 	if not RunState.is_run_active:
 		RunState.start_new_run()
 
-	current_encounter_index = 0
 	RunState.set_current_floor(1)
+
+	if not RunState.initialize_leyline_map(level_data.leyline_map):
+		push_error("The leyline map has no valid starting location.")
+		_show_terminal_message("The leyline map could not be opened.")
+		return
 
 	transition_overlay.hide()
 	restart_button.hide()
 	main_menu_button.hide()
-	_start_current_battle()
+	_begin_map_phase()
 
 
 func _start_current_battle() -> void:
-	var encounter: EncounterData = _get_current_encounter()
+	var encounter: EncounterData
+
+	if active_map_location != null:
+		encounter = active_map_location.encounter
 
 	if encounter == null:
-		push_error("The current floor has no encounter.")
-		_show_terminal_message("This floor has no encounter.")
+		push_error("The selected map location has no encounter.")
+		_show_terminal_message("This location has no encounter.")
 		return
 
 	current_phase = FlowPhase.BATTLE
-	_update_floor_label()
+	_update_run_label()
+	_clear_map_screen()
 
 	var new_battle: Node2D = BATTLE_SCENE.instantiate() as Node2D
 
@@ -109,7 +121,16 @@ func _on_battle_ended(
 		return
 
 	if result == &"victory":
-		call_deferred("_begin_reward_phase")
+		RunState.complete_map_location(active_map_location)
+
+		if (
+			active_map_location != null
+			and active_map_location.location_type
+				== LeylineLocationData.LocationType.BOSS
+		):
+			call_deferred("_show_level_complete")
+		else:
+			call_deferred("_begin_reward_phase")
 	else:
 		call_deferred("_show_run_defeat")
 
@@ -132,7 +153,12 @@ func _begin_reward_phase() -> void:
 	active_reward_screen.rewards_completed.connect(
 		_on_rewards_completed
 	)
-	active_reward_screen.begin_rewards()
+	var affinity: StringName = &""
+
+	if active_map_location != null:
+		affinity = active_map_location.elemental_affinity
+
+	active_reward_screen.begin_rewards(affinity)
 
 
 func _on_rewards_completed() -> void:
@@ -140,43 +166,87 @@ func _on_rewards_completed() -> void:
 	call_deferred("_begin_map_phase")
 
 
-# This is where a future map will return the player's chosen encounter.
-# The prototype follows the fixed encounter order in LevelData.
 func _begin_map_phase() -> void:
 	current_phase = FlowPhase.MAP
+	_clear_active_battle()
+	_clear_reward_screen()
+	_clear_map_screen()
+	transition_overlay.hide()
+	_update_run_label()
 
-	if current_encounter_index + 1 >= level_data.encounters.size():
-		_show_level_complete()
+	var new_map_screen := (
+		LEYLINE_MAP_SCENE.instantiate() as LeylineMapScreen
+	)
+
+	if new_map_screen == null:
+		push_error("Could not instantiate the leyline map.")
+		_show_terminal_message("The leyline map could not be loaded.")
 		return
 
-	_begin_floor_transition(current_encounter_index + 1)
+	active_map_screen = new_map_screen
+	active_map_screen.setup(level_data.leyline_map)
+	active_map_screen.location_selected.connect(
+		_on_map_location_selected
+	)
+	$Interface.add_child(active_map_screen)
 
 
-func _begin_floor_transition(next_encounter_index: int) -> void:
-	current_phase = FlowPhase.TRANSITION
+func _on_map_location_selected(location_id: StringName) -> void:
+	if current_phase != FlowPhase.MAP:
+		return
 
-	var next_floor: int = next_encounter_index + 1
-	transition_label.text = "Moving to level " + str(next_floor)
-	restart_button.hide()
-	main_menu_button.hide()
-	transition_overlay.show()
+	var destination := level_data.leyline_map.find_location(
+		location_id
+	)
 
-	await get_tree().create_timer(transition_duration).timeout
+	if (
+		destination == null
+		or not RunState.travel_to_map_location(
+			level_data.leyline_map,
+			location_id
+		)
+	):
+		return
 
-	_clear_active_battle()
-	current_encounter_index = next_encounter_index
-	RunState.set_current_floor(next_floor)
+	active_map_location = destination
 
-	transition_overlay.hide()
-	_start_current_battle()
+	if RunState.is_map_location_completed(location_id):
+		call_deferred("_begin_map_phase")
+		return
+
+	match destination.location_type:
+		LeylineLocationData.LocationType.REST:
+			var healing: int = mini(
+				8,
+				RunState.maximum_health - RunState.current_health
+			)
+			RunState.set_current_health(
+				RunState.current_health + healing
+			)
+			RunState.complete_map_location(destination)
+			call_deferred("_begin_map_phase")
+		LeylineLocationData.LocationType.START:
+			RunState.complete_map_location(destination)
+			call_deferred("_begin_map_phase")
+		_:
+			if not destination.is_combat_location():
+				push_error("Map location has no supported behavior.")
+				return
+
+			RunState.set_current_floor(
+				RunState.current_floor + 1
+			)
+			_start_current_battle()
 
 
 func _show_level_complete() -> void:
 	current_phase = FlowPhase.COMPLETE
 	transition_label.text = (
-		"Level complete!\n"
-		+ str(level_data.encounters.size())
-		+ " floors cleared"
+		"Convergence stabilized!\n"
+		+ str(RunState.closed_rifts)
+		+ " rifts sealed at "
+		+ str(RunState.instability)
+		+ " instability"
 	)
 	restart_button.text = "New Run"
 	restart_button.show()
@@ -187,8 +257,9 @@ func _show_level_complete() -> void:
 func _show_run_defeat() -> void:
 	current_phase = FlowPhase.DEFEAT
 	transition_label.text = (
-		"Run defeated\nReached floor "
-		+ str(RunState.current_floor)
+		"Run defeated\nSealed "
+		+ str(RunState.closed_rifts)
+		+ " rifts before the leylines collapsed"
 	)
 	restart_button.text = "New Run"
 	restart_button.show()
@@ -206,14 +277,16 @@ func _show_terminal_message(message: String) -> void:
 func _on_restart_button_pressed() -> void:
 	_clear_active_battle()
 	_clear_reward_screen()
+	_clear_map_screen()
 	RunState.restart_current_run()
-	current_encounter_index = 0
 	RunState.set_current_floor(1)
+	RunState.initialize_leyline_map(level_data.leyline_map)
+	active_map_location = null
 
 	transition_overlay.hide()
 	restart_button.hide()
 	main_menu_button.hide()
-	_start_current_battle()
+	_begin_map_phase()
 
 
 func _on_main_menu_button_pressed() -> void:
@@ -241,20 +314,21 @@ func _clear_reward_screen() -> void:
 	active_reward_screen = null
 
 
-func _get_current_encounter() -> EncounterData:
-	if current_encounter_index < 0:
-		return null
+func _clear_map_screen() -> void:
+	if not is_instance_valid(active_map_screen):
+		active_map_screen = null
+		return
 
-	if current_encounter_index >= level_data.encounters.size():
-		return null
-
-	return level_data.encounters[current_encounter_index]
+	active_map_screen.queue_free()
+	active_map_screen = null
 
 
-func _update_floor_label() -> void:
+func _update_run_label() -> void:
 	floor_label.text = (
-		"Floor "
-		+ str(RunState.current_floor)
+		"Rifts "
+		+ str(RunState.closed_rifts)
 		+ " / "
-		+ str(level_data.encounters.size())
+		+ str(level_data.leyline_map.rifts_required)
+		+ "    Instability "
+		+ str(RunState.instability)
 	)

@@ -29,21 +29,33 @@ func _ready() -> void:
 
 func _test_new_elements() -> void:
 	var air_cards: int = 0
+	var earth_cards: int = 0
+	var fire_cards: int = 0
 	var lightning_cards: int = 0
+	var nature_cards: int = 0
 	var water_cards: int = 0
 
 	for card in RunState.deck:
 		match card.get_element_name().to_lower():
 			"air":
 				air_cards += 1
+			"earth":
+				earth_cards += 1
+			"fire":
+				fire_cards += 1
 			"lightning":
 				lightning_cards += 1
+			"nature":
+				nature_cards += 1
 			"water":
 				water_cards += 1
 
-	assert(RunState.deck.size() == 3)
+	assert(RunState.deck.size() == 6)
 	assert(air_cards == 1)
+	assert(earth_cards == 1)
+	assert(fire_cards == 1)
 	assert(lightning_cards == 1)
+	assert(nature_cards == 1)
 	assert(water_cards == 1)
 
 
@@ -52,11 +64,11 @@ func _expand_deck_for_draw_tests() -> void:
 		RunState.get_wizard_elements(1)
 	)
 
-	for _extra_copy in range(2):
-		for element_data in starting_elements:
-			RunState.add_card_to_deck(element_data)
+	for element_data in starting_elements:
+		RunState.add_card_to_deck(element_data)
 
-	assert(RunState.deck.size() == 9)
+	assert(RunState.deck.size() == 12)
+	assert(RunState.get_turn_hand_size() == 4)
 
 
 func _test_draw_and_retain(
@@ -67,11 +79,17 @@ func _test_draw_and_retain(
 ) -> void:
 	var hand: HBoxContainer = deck.get_node("Hand") as HBoxContainer
 
-	assert(deck.size.x >= 1000.0)
-	assert(hand.size.x >= 900.0)
-	assert(deck.hand_cards[0].position.x > 200.0)
+	assert(deck.size == Vector2(640.0, 360.0))
+	assert(hand.size.x == 480.0)
+	assert(deck.hand_cards[0].global_position.x >= 80.0)
+	assert(
+		deck.hand_cards.back().global_position.x
+			+ deck.hand_cards.back().size.x
+		<= 560.0
+	)
 
 	var initial_hand_size: int = deck.hand_cards.size()
+	assert(initial_hand_size == 4)
 
 	var draw_effect := CombatEffectData.new()
 	draw_effect.effect_type = (

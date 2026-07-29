@@ -12,6 +12,7 @@ var explicit_target: Node
 var amount: int = 0
 var element: StringName = &"physical"
 var status_id: StringName = &""
+var converted_status_id: StringName = &""
 var duration: int = -1
 var condition_type: CombatEffectData.ConditionType = (
 	CombatEffectData.ConditionType.ALWAYS
@@ -22,6 +23,7 @@ var amount_if_target_has_status: int = -1
 var consume_required_status: bool = false
 var condition_message: String = ""
 var source_id: StringName = &"combat_effect"
+var source_combatant: Node
 
 
 static func from_data(
@@ -37,6 +39,7 @@ static func from_data(
 	effect.amount = data.amount
 	effect.element = data.element
 	effect.status_id = data.status_id
+	effect.converted_status_id = data.converted_status_id
 	effect.duration = data.duration
 	effect.condition_type = data.condition_type
 	effect.condition_status_id = data.condition_status_id
@@ -62,6 +65,9 @@ static func from_dictionary(
 	effect.amount = int(value.get("amount", 0))
 	effect.element = StringName(str(value.get("element", "physical")))
 	effect.status_id = StringName(str(value.get("status_id", "")))
+	effect.converted_status_id = StringName(
+		str(value.get("converted_status_id", ""))
+	)
 	effect.duration = int(value.get("duration", -1))
 	effect.condition_type = CombatEffectData.condition_type_from_name(
 		str(value.get("condition_type", "always"))
@@ -95,6 +101,7 @@ func duplicate_effect() -> ResolvedCombatEffect:
 	copy.amount = amount
 	copy.element = element
 	copy.status_id = status_id
+	copy.converted_status_id = converted_status_id
 	copy.duration = duration
 	copy.condition_type = condition_type
 	copy.condition_status_id = condition_status_id
@@ -103,6 +110,7 @@ func duplicate_effect() -> ResolvedCombatEffect:
 	copy.consume_required_status = consume_required_status
 	copy.condition_message = condition_message
 	copy.source_id = source_id
+	copy.source_combatant = source_combatant
 	return copy
 
 
@@ -113,6 +121,7 @@ func to_dictionary() -> Dictionary:
 		"amount": amount,
 		"element": String(element),
 		"status_id": String(status_id),
+		"converted_status_id": String(converted_status_id),
 		"duration": duration,
 		"condition_type": (
 			CombatEffectData.get_condition_type_name_for(

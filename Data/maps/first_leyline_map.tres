@@ -1,0 +1,95 @@
+[gd_resource type="Resource" script_class="LeylineMapData" load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://run/leyline_map_data.gd" id="1_map"]
+[ext_resource type="Script" path="res://run/leyline_location_data.gd" id="2_location"]
+[ext_resource type="Resource" path="res://Data/encounters/skeleton_encounter.tres" id="3_skeleton"]
+[ext_resource type="Resource" path="res://Data/encounters/zombie_encounter.tres" id="4_zombie"]
+[ext_resource type="Resource" path="res://Data/encounters/convergence_encounter.tres" id="5_boss"]
+
+[sub_resource type="Resource" id="Location_start"]
+script = ExtResource("2_location")
+location_id = &"astral_sanctum"
+display_name = "Astral Sanctum"
+description = "A stable refuge at the edge of the fractured leylines."
+location_type = 0
+danger_level = 0
+map_position = Vector2(0.06, 0.5)
+connected_location_ids = Array[StringName]([&"drowned_rift", &"storm_rift"])
+
+[sub_resource type="Resource" id="Location_water"]
+script = ExtResource("2_location")
+location_id = &"drowned_rift"
+display_name = "Drowned Rift"
+description = "A broken water leyline spills through the ruined halls."
+location_type = 2
+elemental_affinity = &"water"
+danger_level = 1
+encounter = ExtResource("4_zombie")
+map_position = Vector2(0.23, 0.72)
+connected_location_ids = Array[StringName]([&"astral_sanctum", &"shattered_crossing"])
+
+[sub_resource type="Resource" id="Location_storm"]
+script = ExtResource("2_location")
+location_id = &"storm_rift"
+display_name = "Storm Rift"
+description = "Lightning crawls across a tear suspended in the sky."
+location_type = 2
+elemental_affinity = &"lightning"
+danger_level = 1
+encounter = ExtResource("3_skeleton")
+map_position = Vector2(0.23, 0.25)
+connected_location_ids = Array[StringName]([&"astral_sanctum", &"whispering_sanctuary", &"final_convergence"])
+
+[sub_resource type="Resource" id="Location_crossing"]
+script = ExtResource("2_location")
+location_id = &"shattered_crossing"
+display_name = "Shattered Crossing"
+description = "A contested junction where several weak currents meet."
+location_type = 1
+elemental_affinity = &"air"
+danger_level = 2
+encounter = ExtResource("3_skeleton")
+map_position = Vector2(0.44, 0.78)
+connected_location_ids = Array[StringName]([&"drowned_rift", &"gale_rift"])
+
+[sub_resource type="Resource" id="Location_air"]
+script = ExtResource("2_location")
+location_id = &"gale_rift"
+display_name = "Gale Rift"
+description = "An unstable current twists the earth into a floating maze."
+location_type = 2
+elemental_affinity = &"air"
+danger_level = 2
+encounter = ExtResource("4_zombie")
+map_position = Vector2(0.63, 0.62)
+connected_location_ids = Array[StringName]([&"shattered_crossing", &"whispering_sanctuary", &"final_convergence"])
+
+[sub_resource type="Resource" id="Location_rest"]
+script = ExtResource("2_location")
+location_id = &"whispering_sanctuary"
+display_name = "Whispering Sanctuary"
+description = "A quiet pocket of living magic restores eight health once."
+location_type = 3
+elemental_affinity = &"nature"
+danger_level = 0
+map_position = Vector2(0.48, 0.28)
+connected_location_ids = Array[StringName]([&"storm_rift", &"gale_rift"])
+
+[sub_resource type="Resource" id="Location_boss"]
+script = ExtResource("2_location")
+location_id = &"final_convergence"
+display_name = "Final Convergence"
+description = "The surviving currents knot around two ancient guardians."
+location_type = 4
+danger_level = 3
+encounter = ExtResource("5_boss")
+map_position = Vector2(0.86, 0.44)
+connected_location_ids = Array[StringName]([&"storm_rift", &"gale_rift"])
+
+[resource]
+script = ExtResource("1_map")
+map_id = &"first_leyline_map"
+display_name = "The Fractured Leylines"
+starting_location_id = &"astral_sanctum"
+rifts_required = 3
+locations = Array[ExtResource("2_location")]([SubResource("Location_start"), SubResource("Location_water"), SubResource("Location_storm"), SubResource("Location_crossing"), SubResource("Location_air"), SubResource("Location_rest"), SubResource("Location_boss")])

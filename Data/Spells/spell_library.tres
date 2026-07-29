@@ -12,12 +12,23 @@
 [ext_resource type="Resource" path="res://Data/Spell_recipes/typhoon.tres" id="10_typhoon"]
 [ext_resource type="Resource" path="res://Data/Spell_recipes/ice_shard.tres" id="11_shard"]
 [ext_resource type="Resource" path="res://Data/Spell_recipes/arctic_gust.tres" id="12_gust"]
-[ext_resource type="Resource" path="res://Data/Spell_recipes/shock_wall.tres" id="13_shock"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/conductive_current.tres" id="13_conductive"]
 [ext_resource type="Resource" path="res://Data/Spell_recipes/water_ball.tres" id="14_ball"]
 [ext_resource type="Resource" path="res://Data/Spell_recipes/jolt.tres" id="15_jolt"]
 [ext_resource type="Resource" path="res://Data/Spell_recipes/stormcloud.tres" id="16_storm"]
 [ext_resource type="Resource" path="res://Data/Spell_recipes/slash.tres" id="17_slash"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/scorch.tres" id="18_scorch"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/burst_lightning.tres" id="19_burst"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/writhing_roots.tres" id="20_roots"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/mud_wall.tres" id="21_mud"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/splinter.tres" id="22_splinter"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/seeping_oil.tres" id="23_oil"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/firebreathing.tres" id="24_breathing"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/encase.tres" id="25_encase"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/rapid_growth.tres" id="26_growth"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/lava_floor.tres" id="27_lava"]
+[ext_resource type="Resource" path="res://Data/Spell_recipes/static_bulwark.tres" id="28_bulwark"]
 
 [resource]
 script = ExtResource("2_library")
-recipes = Array[ExtResource("1_recipe")]([ExtResource("3_speed"), ExtResource("4_helix"), ExtResource("5_dodge"), ExtResource("6_dash"), ExtResource("7_hurricane"), ExtResource("8_bolt"), ExtResource("9_wall"), ExtResource("10_typhoon"), ExtResource("11_shard"), ExtResource("12_gust"), ExtResource("13_shock"), ExtResource("14_ball"), ExtResource("15_jolt"), ExtResource("16_storm"), ExtResource("17_slash")])
+recipes = Array[ExtResource("1_recipe")]([ExtResource("3_speed"), ExtResource("4_helix"), ExtResource("5_dodge"), ExtResource("6_dash"), ExtResource("7_hurricane"), ExtResource("8_bolt"), ExtResource("9_wall"), ExtResource("10_typhoon"), ExtResource("11_shard"), ExtResource("12_gust"), ExtResource("13_conductive"), ExtResource("14_ball"), ExtResource("15_jolt"), ExtResource("16_storm"), ExtResource("17_slash"), ExtResource("18_scorch"), ExtResource("19_burst"), ExtResource("20_roots"), ExtResource("21_mud"), ExtResource("22_splinter"), ExtResource("23_oil"), ExtResource("24_breathing"), ExtResource("25_encase"), ExtResource("26_growth"), ExtResource("27_lava"), ExtResource("28_bulwark")])

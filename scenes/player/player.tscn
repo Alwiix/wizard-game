@@ -3,34 +3,42 @@
 [ext_resource type="Texture2D" uid="uid://dpl6y1dq27mxy" path="res://icon.svg" id="1_8afob"]
 [ext_resource type="Script" uid="uid://cxn1losduqwqu" path="res://scenes/player/player.gd" id="1_dovo2"]
 [ext_resource type="Script" uid="uid://brtpafrc2sm3a" path="res://statuses/status_controller.gd" id="3_gmlin"]
+[ext_resource type="Script" path="res://scenes/ui/hover_expand_label.gd" id="4_hover"]
 
 [node name="Player" type="Node2D" unique_id=802157067]
 script = ExtResource("1_dovo2")
 
 [node name="PlayerImage" type="Sprite2D" parent="." unique_id=660733436]
-position = Vector2(166, 289)
+position = Vector2(86, 148)
+scale = Vector2(0.48, 0.48)
 texture = ExtResource("1_8afob")
 
 [node name="HealthLabel" type="Label" parent="." unique_id=1683848822]
-offset_left = 111.0
-offset_top = 356.0
-offset_right = 210.0
-offset_bottom = 379.0
+offset_left = 24.0
+offset_top = 204.0
+offset_right = 148.0
+offset_bottom = 218.0
+theme_override_font_sizes/font_size = 9
 text = "Health 30/30"
 
 [node name="EnergyLabel" type="Label" parent="." unique_id=1595726652]
-offset_left = 119.0
-offset_top = 382.0
-offset_right = 205.0
-offset_bottom = 405.0
+offset_left = 24.0
+offset_top = 220.0
+offset_right = 148.0
+offset_bottom = 234.0
+theme_override_font_sizes/font_size = 9
 text = "Energy: 2/2"
 
 [node name="StatusLabel" type="Label" parent="." unique_id=44214282]
-offset_left = 105.0
-offset_top = 203.0
-offset_right = 221.0
-offset_bottom = 226.0
+offset_left = 8.0
+offset_top = 62.0
+offset_right = 164.0
+offset_bottom = 102.0
+theme_override_font_sizes/font_size = 8
 text = "Statuses: None"
+clip_text = true
+autowrap_mode = 2
+script = ExtResource("4_hover")
 
 [node name="StatusController" type="Node" parent="." unique_id=1198493986]
 script = ExtResource("3_gmlin")

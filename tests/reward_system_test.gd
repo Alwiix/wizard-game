@@ -196,9 +196,9 @@ func _test_skipping_rewards() -> void:
 	assert(reward_screen.skip_reward_button.text == "Skip Upgrade")
 
 	await get_tree().process_frame
-	assert(reward_screen.deck_grid.columns == 6)
-	assert(reward_screen.deck_scroll.size.x > 1000.0)
-	assert(reward_screen.deck_scroll.size.y > 300.0)
+	assert(reward_screen.deck_grid.columns == 5)
+	assert(reward_screen.deck_scroll.size.x <= 624.0)
+	assert(reward_screen.deck_scroll.size.y > 100.0)
 
 	assert(reward_screen.skip_upgrade_reward())
 

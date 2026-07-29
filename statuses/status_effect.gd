@@ -54,6 +54,21 @@ func modify_incoming_damage(
 	return amount
 
 
+func modify_outgoing_damage(
+	_combatant: Node,
+	amount: int
+) -> int:
+	return amount
+
+
+func modify_outgoing_status_amount(
+	_combatant: Node,
+	_status_id: StringName,
+	amount: int
+) -> int:
+	return amount
+
+
 func resolve_action_attempt(
 	_combatant: Node,
 	_can_miss: bool,

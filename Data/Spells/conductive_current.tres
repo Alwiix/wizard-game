@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="ElectrifiedWetTarget"]
+script = ExtResource("1_effect")
+effect_type = 1
+target = 1
+amount = 2
+status_id = &"electrified"
+condition_type = 1
+condition_status_id = &"wet"
+
+[sub_resource type="Resource" id="WetDryTarget"]
+script = ExtResource("1_effect")
+effect_type = 1
+target = 1
+amount = 2
+status_id = &"wet"
+duration = 2
+condition_type = 2
+condition_status_id = &"wet"
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"conductive_current"
+display_name = "Conductive Current"
+description = "Make a dry target Wet for 2 turns. If it is already Wet, apply 2 Electrified instead."
+energy_cost = 1
+effects = Array[ExtResource("1_effect")]([SubResource("ElectrifiedWetTarget"), SubResource("WetDryTarget")])

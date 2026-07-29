@@ -53,15 +53,16 @@ func apply_modifier(
 	modifier_id: StringName,
 	source: Node,
 	amount: int = 1,
-	_duration: int = 1
+	duration: int = 1
 ) -> bool:
 	match modifier_id:
 		LAVA_FLOOR_ID:
 			active_modifiers[modifier_id] = {
 				"burn_amount": max(amount, 1),
-				"expires_after_side": (
+				"ticks_after_side": (
 					&"enemy" if source == player else &"player"
-				)
+				),
+				"remaining_turns": max(duration, 1)
 			}
 			modifiers_changed.emit()
 			return true
@@ -140,14 +141,24 @@ func _reset_lava_action_guard() -> void:
 
 func process_side_turn_end(side: StringName) -> void:
 	var modifier_ids: Array = active_modifiers.keys().duplicate()
-	var modifier_was_removed: bool = false
+	var modifiers_changed_value: bool = false
 
 	for modifier_id in modifier_ids:
 		var modifier: Dictionary = active_modifiers[modifier_id]
 
-		if modifier.get("expires_after_side") == side:
-			active_modifiers.erase(modifier_id)
-			modifier_was_removed = true
+		if modifier.get("ticks_after_side") != side:
+			continue
 
-	if modifier_was_removed:
+		modifier["remaining_turns"] = (
+			int(modifier.get("remaining_turns", 1)) - 1
+		)
+
+		if int(modifier["remaining_turns"]) <= 0:
+			active_modifiers.erase(modifier_id)
+		else:
+			active_modifiers[modifier_id] = modifier
+
+		modifiers_changed_value = true
+
+	if modifiers_changed_value:
 		modifiers_changed.emit()

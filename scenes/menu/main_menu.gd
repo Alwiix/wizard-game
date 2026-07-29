@@ -54,7 +54,7 @@ func _populate_difficulties() -> void:
 func _populate_wizards() -> void:
 	wizard_option.clear()
 	wizard_option.add_item(
-		"Water / Lightning / Air",
+		"All Elements",
 		1
 	)
 

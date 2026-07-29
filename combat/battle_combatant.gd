@@ -70,6 +70,18 @@ func remove_status(status_id: StringName) -> void:
 		controller.remove_status(status_id)
 
 
+func remove_status_stacks(
+	status_id: StringName,
+	amount: int
+) -> int:
+	var controller := get_status_controller()
+
+	if controller == null:
+		return 0
+
+	return controller.remove_status_stacks(status_id, amount)
+
+
 func has_status(status_id: StringName) -> bool:
 	var controller := get_status_controller()
 	return controller != null and controller.has_status(status_id)
@@ -82,6 +94,30 @@ func get_status_stacks(status_id: StringName) -> int:
 		return 0
 
 	return controller.get_status_stacks(status_id)
+
+
+func modify_outgoing_damage(amount: int) -> int:
+	var controller := get_status_controller()
+
+	if controller == null:
+		return max(amount, 0)
+
+	return controller.modify_outgoing_damage(amount)
+
+
+func modify_outgoing_status_amount(
+	status_id: StringName,
+	amount: int
+) -> int:
+	var controller := get_status_controller()
+
+	if controller == null:
+		return max(amount, 0)
+
+	return controller.modify_outgoing_status_amount(
+		status_id,
+		amount
+	)
 
 
 func process_attack_completed(

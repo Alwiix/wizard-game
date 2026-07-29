@@ -1,4 +1,4 @@
-extends Button
+extends HoverExpandButton
 
 
 signal selection_changed(card, is_selected: bool)
@@ -24,6 +24,7 @@ func _ready() -> void:
 func update_display() -> void:
 	if card_instance == null:
 		text = "Missing card data"
+		tooltip_text = text
 		return
 
 	text = (
@@ -53,6 +54,8 @@ func update_display() -> void:
 
 	if not upgrade_names.is_empty():
 		text += "\n" + ", ".join(upgrade_names)
+
+	tooltip_text = text
 
 
 func get_element_name() -> String:

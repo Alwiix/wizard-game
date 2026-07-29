@@ -53,11 +53,22 @@ func _test_recipe_set() -> void:
 		[[&"air", &"air", &"water"], &"typhoon"],
 		[[&"water", &"water", &"air"], &"ice_shard"],
 		[[&"water", &"air"], &"arctic_gust"],
-		[[&"water", &"lightning"], &"shock_wall"],
+		[[&"water", &"lightning"], &"conductive_current"],
 		[[&"water", &"water"], &"water_ball"],
 		[[&"lightning", &"lightning"], &"jolt"],
 		[[&"air", &"lightning"], &"stormcloud"],
-		[[&"air", &"air"], &"slash"]
+		[[&"air", &"air"], &"slash"],
+		[[&"fire", &"fire"], &"scorch"],
+		[[&"fire", &"lightning"], &"burst_lightning"],
+		[[&"earth", &"nature"], &"writhing_roots"],
+		[[&"earth", &"water"], &"mud_wall"],
+		[[&"air", &"nature"], &"splinter"],
+		[[&"nature", &"fire"], &"seeping_oil"],
+		[[&"fire", &"air"], &"firebreathing"],
+		[[&"earth", &"earth"], &"encase"],
+		[[&"nature", &"water"], &"rapid_growth"],
+		[[&"fire", &"earth"], &"lava_floor"],
+		[[&"earth", &"lightning"], &"static_bulwark"]
 	]
 
 	assert(spell_library.recipes.size() == expected_spells.size())
@@ -131,24 +142,15 @@ func _test_setup_spells() -> void:
 
 	_reset_combatants()
 	await _resolve_spell([&"water", &"lightning"])
-	assert(player.get_status_stacks(&"block") == 5)
-	assert(player.get_status_stacks(&"electrified_guard") == 2)
-
-	combat_events.attack_completed.emit(
-		enemy,
-		player,
-		{},
-		true,
-		1
-	)
-	assert(enemy.get_status_stacks(&"electrified") == 2)
-	assert(not enemy.has_status(&"dazed"))
+	assert(enemy.has_status(&"wet"))
+	assert(not player.has_status(&"block"))
 	assert(not player.has_status(&"electrified_guard"))
 
 	var health_before_discharge := enemy.health
-	enemy.add_status(&"wet", 1, 2)
+	await _resolve_spell([&"water", &"lightning"])
 	assert(enemy.health == health_before_discharge - 2)
 	assert(not enemy.has_status(&"electrified"))
+	assert(enemy.has_status(&"wet"))
 
 
 func _test_damage_and_status_spells() -> void:

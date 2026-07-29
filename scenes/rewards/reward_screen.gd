@@ -8,6 +8,9 @@ signal rewards_completed
 const UPGRADE_LIBRARY: CardUpgradeLibraryData = (
 	ContentCatalog.UPGRADE_LIBRARY
 )
+const HOVER_EXPAND_BUTTON: GDScript = preload(
+	"res://scenes/ui/hover_expand_button.gd"
+)
 
 
 var rng := RandomNumberGenerator.new()
@@ -16,6 +19,7 @@ var pending_upgrade_id: StringName = &""
 var selected_upgrade_card: CardInstance
 var deck_card_buttons: Dictionary = {}
 var element_reward_claimed: bool = false
+var preferred_element: StringName = &""
 
 
 @onready var title_label: Label = %TitleLabel
@@ -36,7 +40,10 @@ func _ready() -> void:
 	skip_reward_button.pressed.connect(_on_skip_reward_pressed)
 
 
-func begin_rewards() -> void:
+func begin_rewards(
+	elemental_affinity: StringName = &""
+) -> void:
+	preferred_element = elemental_affinity
 	element_reward_claimed = false
 	selected_upgrade_card = null
 	element_choices = _generate_element_choices()
@@ -130,9 +137,24 @@ func get_upgrade_name(upgrade_id: StringName) -> String:
 
 func _generate_element_choices() -> Array[ElementCardData]:
 	var available_elements: Array[ElementCardData] = (
-		RunState.get_reward_element_card_data()
+		RunState.get_all_element_card_data()
+		if preferred_element != &""
+		else RunState.get_reward_element_card_data()
 	)
 	var choices: Array[ElementCardData] = []
+	var preferred_card: ElementCardData
+
+	for card_data in available_elements:
+		if (
+			card_data.element_name.to_lower()
+			== String(preferred_element).to_lower()
+		):
+			preferred_card = card_data
+			break
+
+	if preferred_card != null:
+		choices.append(preferred_card)
+		available_elements.erase(preferred_card)
 
 	available_elements.shuffle()
 
@@ -185,8 +207,16 @@ func _show_element_choice() -> void:
 	title_label.text = "Battle Rewards"
 	instruction_label.text = "Choose one Element Card"
 	reward_description.text = (
-		"Add one of these three cards to your deck."
+		"Add one of these three cards to your deck.\n"
+		+ _get_hand_size_progress_text()
 	)
+
+	if preferred_element != &"":
+		reward_description.text += (
+			"\nThe local "
+			+ String(preferred_element).capitalize()
+			+ " leyline guarantees a matching choice when available."
+		)
 	element_choice_container.show()
 	deck_scroll.hide()
 	apply_upgrade_button.hide()
@@ -196,13 +226,18 @@ func _show_element_choice() -> void:
 	_clear_container(element_choice_container)
 
 	for card_data in element_choices:
-		var card_button := Button.new()
-		card_button.custom_minimum_size = Vector2(170.0, 130.0)
+		var card_button := (
+			HOVER_EXPAND_BUTTON.new() as Button
+		)
+		card_button.custom_minimum_size = Vector2(110.0, 72.0)
+		card_button.add_theme_font_size_override("font_size", 9)
+		card_button.clip_text = true
 		card_button.text = (
 			card_data.display_name
 			+ "\nSpell ingredient"
 			+ "\nAdd to deck"
 		)
+		card_button.tooltip_text = card_button.text
 		card_button.pressed.connect(
 			_on_element_button_pressed.bind(card_data)
 		)
@@ -227,7 +262,11 @@ func _show_upgrade_choice() -> void:
 	instruction_label.text = (
 		"Choose a card for " + upgrade_data.display_name
 	)
-	reward_description.text = upgrade_data.description
+	reward_description.text = (
+		upgrade_data.description
+		+ "\n"
+		+ _get_hand_size_progress_text()
+	)
 	deck_scroll.show()
 	apply_upgrade_button.text = (
 		"Apply " + upgrade_data.display_name
@@ -246,12 +285,16 @@ func _populate_deck_grid() -> void:
 
 	for card_index in range(RunState.deck.size()):
 		var card: CardInstance = RunState.deck[card_index]
-		var card_button := Button.new()
+		var card_button := (
+			HOVER_EXPAND_BUTTON.new() as Button
+		)
 		var upgrade_names: Array[String] = (
 			card.get_upgrade_display_names()
 		)
 
-		card_button.custom_minimum_size = Vector2(150.0, 92.0)
+		card_button.custom_minimum_size = Vector2(102.0, 54.0)
+		card_button.add_theme_font_size_override("font_size", 8)
+		card_button.clip_text = true
 		card_button.toggle_mode = true
 		card_button.text = (
 			str(card_index + 1)
@@ -278,6 +321,7 @@ func _populate_deck_grid() -> void:
 				_on_deck_card_pressed.bind(card)
 			)
 
+		card_button.tooltip_text = card_button.text
 		deck_grid.add_child(card_button)
 		deck_card_buttons[card_button] = card
 
@@ -309,6 +353,19 @@ func _card_can_receive_upgrade(
 	return (
 		upgrade_data.can_stack
 		or not card.has_upgrade(upgrade_data.upgrade_id)
+	)
+
+
+func _get_hand_size_progress_text() -> String:
+	if RunState.expanded_hand_unlocked:
+		return "Expanded spellbook: refill your hand to 4."
+
+	return (
+		"Spellbook expansion: "
+		+ str(RunState.deck.size())
+		+ " / "
+		+ str(RunState.EXPANDED_HAND_DECK_SIZE)
+		+ " cards. Reach 12 to permanently refill to 4."
 	)
 
 

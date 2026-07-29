@@ -244,6 +244,87 @@ static func _validate_levels(errors: Array[String]) -> void:
 					encounter.display_name + " has no enemies."
 				)
 
+		_validate_leyline_map(level, errors)
+
+
+static func _validate_leyline_map(
+	level: LevelData,
+	errors: Array[String]
+) -> void:
+	var map_data := level.leyline_map
+
+	if map_data == null:
+		errors.append(level.display_name + " has no leyline map.")
+		return
+
+	var location_ids: Dictionary = {}
+
+	for location in map_data.locations:
+		if location == null:
+			errors.append(
+				map_data.display_name + " contains a null location."
+			)
+			continue
+
+		_require_unique(
+			String(location.location_id).to_lower(),
+			"map location ID",
+			location_ids,
+			errors
+		)
+
+		if (
+			location.is_combat_location()
+			and (
+				location.encounter == null
+				or location.encounter.get_enemy_roster().is_empty()
+			)
+		):
+			errors.append(
+				location.display_name
+				+ " is a combat location without an encounter."
+			)
+
+	if map_data.find_location(map_data.starting_location_id) == null:
+		errors.append(
+			map_data.display_name + " has an invalid starting location."
+		)
+
+	if map_data.rifts_required <= 0:
+		errors.append(
+			map_data.display_name + " must require at least one rift."
+		)
+	elif map_data.rifts_required > map_data.get_rift_count():
+		errors.append(
+			map_data.display_name
+			+ " requires more rifts than it contains."
+		)
+
+	for location in map_data.locations:
+		if location == null:
+			continue
+
+		for connected_id in location.connected_location_ids:
+			var connected := map_data.find_location(connected_id)
+
+			if connected == null:
+				errors.append(
+					location.display_name
+					+ " connects to unknown location "
+					+ String(connected_id)
+					+ "."
+				)
+			elif (
+				location.location_id
+				not in connected.connected_location_ids
+			):
+				errors.append(
+					location.display_name
+					+ " has a one-way connection to "
+					+ connected.display_name
+					+ "."
+				)
+
 static func _validate_effects(
 	effects: Array,
 	owner_name: String,
@@ -258,7 +339,9 @@ static func _validate_effects(
 			effect.effect_type
 				in [
 					CombatEffectData.EffectType.APPLY_STATUS,
-					CombatEffectData.EffectType.REMOVE_STATUS
+					CombatEffectData.EffectType.REMOVE_STATUS,
+					CombatEffectData.EffectType.MULTIPLY_STATUS,
+					CombatEffectData.EffectType.CONVERT_STATUS
 				]
 			and not StatusRegistry.has_status(effect.status_id)
 		):
@@ -266,6 +349,20 @@ static func _validate_effects(
 				owner_name
 				+ " references unknown status "
 				+ String(effect.status_id)
+				+ "."
+			)
+
+		if (
+			effect.effect_type
+				== CombatEffectData.EffectType.CONVERT_STATUS
+			and not StatusRegistry.has_status(
+				effect.converted_status_id
+			)
+		):
+			errors.append(
+				owner_name
+				+ " converts into unknown status "
+				+ String(effect.converted_status_id)
 				+ "."
 			)
 

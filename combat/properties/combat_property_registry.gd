@@ -8,6 +8,12 @@ const PROPERTY_SCRIPTS: Dictionary = {
 	),
 	&"shatter": preload(
 		"res://combat/properties/shatter_property.gd"
+	),
+	&"ignite": preload(
+		"res://combat/properties/ignite_property.gd"
+	),
+	&"gust": preload(
+		"res://combat/properties/gust_property.gd"
 	)
 }
 
@@ -33,6 +39,7 @@ static func prepare_effects(
 			)
 			runtime_effect.explicit_target = target
 			runtime_effect.source_id = action.action_id
+			runtime_effect.source_combatant = action.caster
 			effects.append(runtime_effect)
 
 	for property_value in action.properties:
@@ -55,6 +62,26 @@ static func prepare_effects(
 			continue
 
 		effects = handler.apply(action, context, effects)
+
+	if (
+		action.caster != null
+		and action.caster.has_method("modify_outgoing_damage")
+	):
+		for effect in effects:
+			if (
+				effect.effect_type
+				== CombatEffectData.EffectType.DAMAGE
+			):
+				effect.amount = action.caster.modify_outgoing_damage(
+					effect.amount
+				)
+
+				if effect.amount_if_target_has_status >= 0:
+					effect.amount_if_target_has_status = (
+						action.caster.modify_outgoing_damage(
+							effect.amount_if_target_has_status
+						)
+					)
 
 	return effects
 

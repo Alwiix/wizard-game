@@ -9,7 +9,9 @@ enum EffectType {
 	HEAL,
 	DRAW_CARDS,
 	RETAIN_CARDS,
-	APPLY_BATTLE_MODIFIER
+	APPLY_BATTLE_MODIFIER,
+	MULTIPLY_STATUS,
+	CONVERT_STATUS
 }
 
 
@@ -27,7 +29,8 @@ enum TargetType {
 enum ConditionType {
 	ALWAYS,
 	TARGET_HAS_STATUS,
-	TARGET_LACKS_STATUS
+	TARGET_LACKS_STATUS,
+	NO_ENEMY_HAS_STATUS
 }
 
 
@@ -41,6 +44,7 @@ enum ConditionType {
 
 @export_group("Status")
 @export var status_id: StringName = &""
+@export var converted_status_id: StringName = &""
 @export var duration: int = -1
 
 @export_group("Effect Condition")
@@ -61,6 +65,7 @@ func to_effect_dictionary() -> Dictionary:
 		"amount": amount,
 		"element": String(element),
 		"status_id": String(status_id),
+		"converted_status_id": String(converted_status_id),
 		"duration": duration,
 		"condition_type": get_condition_type_name(),
 		"condition_status_id": String(condition_status_id),
@@ -97,6 +102,10 @@ static func get_effect_type_name_for(
 			return "retain_cards"
 		EffectType.APPLY_BATTLE_MODIFIER:
 			return "apply_battle_modifier"
+		EffectType.MULTIPLY_STATUS:
+			return "multiply_status"
+		EffectType.CONVERT_STATUS:
+			return "convert_status"
 		_:
 			return ""
 
@@ -115,6 +124,8 @@ static func get_condition_type_name_for(
 			return "target_has_status"
 		ConditionType.TARGET_LACKS_STATUS:
 			return "target_lacks_status"
+		ConditionType.NO_ENEMY_HAS_STATUS:
+			return "no_enemy_has_status"
 		_:
 			return "always"
 
@@ -157,6 +168,10 @@ static func effect_type_from_name(value: String) -> EffectType:
 			return EffectType.RETAIN_CARDS
 		"apply_battle_modifier":
 			return EffectType.APPLY_BATTLE_MODIFIER
+		"multiply_status":
+			return EffectType.MULTIPLY_STATUS
+		"convert_status":
+			return EffectType.CONVERT_STATUS
 		_:
 			return EffectType.DAMAGE
 
@@ -167,6 +182,8 @@ static func condition_type_from_name(value: String) -> ConditionType:
 			return ConditionType.TARGET_HAS_STATUS
 		"target_lacks_status":
 			return ConditionType.TARGET_LACKS_STATUS
+		"no_enemy_has_status":
+			return ConditionType.NO_ENEMY_HAS_STATUS
 		_:
 			return ConditionType.ALWAYS
 

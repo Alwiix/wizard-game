@@ -11,6 +11,9 @@ const RULE_SCRIPTS: Array[Script] = [
 	),
 	preload(
 		"res://statuses/interactions/conductive_status_rule.gd"
+	),
+	preload(
+		"res://statuses/interactions/nature_status_rule.gd"
 	)
 ]
 

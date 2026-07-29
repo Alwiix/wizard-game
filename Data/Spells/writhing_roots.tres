@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SpellData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://statuses/combat_effect_data.gd" id="1_effect"]
+[ext_resource type="Script" path="res://Scripts/Spells/spell_data.gd" id="2_spell"]
+
+[sub_resource type="Resource" id="ConditionalDamage"]
+script = ExtResource("1_effect")
+target = 1
+amount = 2
+element = &"nature"
+condition_type = 1
+condition_status_id = &"creeping_vines"
+
+[sub_resource type="Resource" id="Vines"]
+script = ExtResource("1_effect")
+effect_type = 1
+target = 1
+amount = 1
+status_id = &"creeping_vines"
+
+[resource]
+script = ExtResource("2_spell")
+spell_id = &"writhing_roots"
+display_name = "Writhing Roots"
+description = "Apply 1 Creeping Vines. If the target already has Creeping Vines, also deal 2 damage."
+energy_cost = 1
+effects = Array[ExtResource("1_effect")]([SubResource("ConditionalDamage"), SubResource("Vines")])

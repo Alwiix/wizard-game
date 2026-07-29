@@ -15,6 +15,7 @@ func apply(
 
 	if application.status_id == &"wet":
 		application.remove_existing(&"burn")
+		application.remove_existing(&"muddy")
 
 	if application.status_id == &"burn":
 		application.remove_existing(&"cold")

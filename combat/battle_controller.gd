@@ -95,7 +95,7 @@ func _setup_enemy(
 
 func _layout_enemies() -> void:
 	var count := enemies.size()
-	var spacing := 210.0
+	var spacing := 110.0
 	var starting_offset := -spacing * float(count - 1) / 2.0
 
 	for index in range(count):

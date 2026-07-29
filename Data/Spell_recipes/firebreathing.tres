@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SpellRecipeData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Spells/spell_recipe_data.gd" id="1_recipe"]
+[ext_resource type="Resource" path="res://Data/Spells/firebreathing.tres" id="2_spell"]
+
+[resource]
+script = ExtResource("1_recipe")
+first_element = &"fire"
+second_element = &"air"
+spell = ExtResource("2_spell")
