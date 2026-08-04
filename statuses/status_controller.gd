@@ -412,9 +412,12 @@ func update_status_label() -> void:
 	if status_label == null:
 		return
 
+	status_label.text = get_display_text()
+
+
+func get_display_text() -> String:
 	if active_statuses.is_empty():
-		status_label.text = "Statuses: None"
-		return
+		return "Statuses: None"
 
 	var lines: Array[String] = ["Statuses:"]
 
@@ -424,4 +427,4 @@ func update_status_label() -> void:
 		if status != null:
 			lines.append(status.get_display_text())
 
-	status_label.text = "\n".join(lines)
+	return "\n".join(lines)

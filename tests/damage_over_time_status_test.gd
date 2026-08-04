@@ -12,8 +12,11 @@ func _ready() -> void:
 
 	var player: BattlePlayer = battle.get_node("Player") as BattlePlayer
 	var enemy: BattleEnemy = battle.get_node("Enemy") as BattleEnemy
+	var health_bar: TextureProgressBar = battle.get_node(
+		"PlayerHUD/HealthBar"
+	) as TextureProgressBar
 
-	_test_bleed(player, enemy)
+	_test_bleed(player, enemy, health_bar)
 	_test_burn(player)
 	_test_burn_and_wet(player)
 
@@ -23,18 +26,21 @@ func _ready() -> void:
 
 func _test_bleed(
 	player: BattlePlayer,
-	enemy: BattleEnemy
+	enemy: BattleEnemy,
+	health_bar: TextureProgressBar
 ) -> void:
 	player.add_status(&"bleed", 4)
 	player.process_statuses_at_turn_end()
 
 	assert(player.health == 26)
+	assert(health_bar.value == 26.0)
 	assert(player.get_status_stacks(&"bleed") == 3)
 
 	var restored_health: int = player.heal(2)
 
 	assert(restored_health == 2)
 	assert(player.health == 28)
+	assert(health_bar.value == 28.0)
 	assert(not player.has_status(&"bleed"))
 
 	# Healing removes Bleed even when some or all healing is capped.

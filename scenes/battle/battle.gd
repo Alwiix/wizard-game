@@ -31,6 +31,7 @@ func setup_encounter() -> void:
 
 func _ready() -> void:
 	setup_encounter()
+	$PlayerHUD.bind_player($Player)
 
 	if not $BattleModifierController.modifiers_changed.is_connected(
 		_update_arena_status_label

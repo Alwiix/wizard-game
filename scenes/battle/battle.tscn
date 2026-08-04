@@ -13,12 +13,23 @@
 [ext_resource type="Script" path="res://combat/battle_modifier_controller.gd" id="9_modifiers"]
 [ext_resource type="Script" path="res://combat/battle_controller.gd" id="10_controller"]
 [ext_resource type="Script" path="res://scenes/ui/hover_expand_label.gd" id="11_hover"]
+[ext_resource type="Texture2D" path="res://art/ui/player ui V1.png" id="12_player_ui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/player_hud.tscn" id="13_player_hud"]
 
 [node name="Battle" type="Node2D" unique_id=1039771782]
 script = ExtResource("1_0yh6x")
 encounter_data = ExtResource("2_agsc7")
 
+[node name="PlayerUIBackground" type="TextureRect" parent="."]
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+texture = ExtResource("12_player_ui")
+expand_mode = 1
+
 [node name="Player" parent="." unique_id=802157067 instance=ExtResource("2_fh7rg")]
+
+[node name="PlayerHUD" parent="." instance=ExtResource("13_player_hud")]
 
 [node name="Enemy" parent="." unique_id=649599461 instance=ExtResource("2_h0kxc")]
 

@@ -18,6 +18,9 @@ func _ready() -> void:
 
 	var player: BattlePlayer = battle.get_node("Player") as BattlePlayer
 	var enemy: BattleEnemy = battle.get_node("Enemy") as BattleEnemy
+	var health_bar: TextureProgressBar = battle.get_node(
+		"PlayerHUD/HealthBar"
+	) as TextureProgressBar
 	var resolver: CombatEffectResolver = battle.get_node(
 		"CombatEffectResolver"
 	) as CombatEffectResolver
@@ -31,12 +34,14 @@ func _ready() -> void:
 	)
 
 	assert(player.health == 24)
+	assert(health_bar.value == 24.0)
 	assert(RunState.current_health == 24)
 	assert(int(result.get("total_health_healed", 0)) == 4)
 
 	var capped_healing: int = player.heal(100)
 	assert(capped_healing == 6)
 	assert(player.health == player.maximum_health)
+	assert(health_bar.value == health_bar.max_value)
 	assert(RunState.current_health == RunState.maximum_health)
 
 	print("Healing effect test passed.")

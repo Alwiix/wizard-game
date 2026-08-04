@@ -3,6 +3,8 @@ extends BattleCombatant
 
 
 signal defeated
+signal health_changed(current_health: int, maximum_health: int)
+signal energy_changed(current_energy: int, maximum_energy: int)
 
 
 @export var maximum_energy: int = 2
@@ -57,6 +59,7 @@ func spend_energy(amount: int) -> bool:
 
 func _on_health_changed() -> void:
 	RunState.set_current_health(health)
+	health_changed.emit(health, maximum_health)
 
 
 func _on_defeated(_context: Dictionary) -> void:
@@ -68,18 +71,8 @@ func get_display_name() -> String:
 
 
 func update_health_text() -> void:
-	$HealthLabel.text = (
-		"Health: "
-		+ str(health)
-		+ " / "
-		+ str(maximum_health)
-	)
+	pass
 
 
 func update_energy_text() -> void:
-	$EnergyLabel.text = (
-		"Energy: "
-		+ str(energy)
-		+ " / "
-		+ str(maximum_energy)
-	)
+	energy_changed.emit(energy, maximum_energy)
